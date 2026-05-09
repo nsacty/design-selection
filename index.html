@@ -109,6 +109,31 @@
       scrollbar-width: none;
     }
     .battle-pair::-webkit-scrollbar { display: none; }
+    .battle-scroll-wrap {
+      position: relative;
+    }
+    .scroll-arrow {
+      display: none;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      color: #333;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .scroll-arrow-left { left: 4px; }
+    .scroll-arrow-right { right: 4px; }
+    @media (hover: hover) and (pointer: fine) {
+      .scroll-arrow { display: flex; align-items: center; justify-content: center; }
+    }
     /* PC幅制限ラッパー */
     .battle-inner { max-width: 600px; margin: 0 auto; }
     .battle-item {
@@ -275,8 +300,12 @@ const SCENARIO_B_SHORT = '手に取りたいのはどちら？';
   </div>
 
   <div class="battle-content">
-    <div class="battle-guide">← 横にスクロールできます　　画像をタップすると拡大できます</div>
-    <div class="battle-pair" id="battle-pair"></div>
+    <div class="battle-guide">画像をタップすると拡大できます</div>
+    <div class="battle-scroll-wrap">
+      <button class="scroll-arrow scroll-arrow-left" id="arrow-left" onclick="scrollPair(-1)">&#8249;</button>
+      <div class="battle-pair" id="battle-pair"></div>
+      <button class="scroll-arrow scroll-arrow-right" id="arrow-right" onclick="scrollPair(1)">&#8250;</button>
+    </div>
   </div>
 
   <div class="battle-footer">
@@ -380,6 +409,7 @@ function renderBattle() {
   }
 
   document.getElementById('btn-back').disabled = (currentQ === 0);
+  document.getElementById('battle-pair').scrollLeft = 0;
   window.scrollTo(0, 0);
 }
 
@@ -445,6 +475,12 @@ function shuffle(arr) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+function scrollPair(dir) {
+  const pair = document.getElementById('battle-pair');
+  const cardWidth = pair.querySelector('.battle-item').offsetWidth + 12;
+  pair.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
 }
 
 function submitAndDone() {
