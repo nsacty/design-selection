@@ -219,7 +219,7 @@ const LABELS = ['パターン1', 'パターン2', 'パターン3', 'パターン
 
 const SCENARIO_A_LONG  = 'あなたは病院の受付スタッフです。外から来た営業の方が、パンフレットを持ってきて「先生にお渡しください」と言っています。\n\n2枚ずつ比べながら、先生に渡したい思うものを選んでください。';
 const SCENARIO_A_SHORT = '先生に渡したいのはどちら？';
-const SCENARIO_B_LONG  = 'あなたは病院の待合室で順番を待っている患者です。待合室にパンフレットが置いてあります。\n\n、手に取って読んでみたいと思うものを選んでください。';
+const SCENARIO_B_LONG  = 'あなたは病院の待合室で順番を待っている患者です。待合室にパンフレットが置いてあります。\n\n手に取って読んでみたいと思うものを選んでください。';
 const SCENARIO_B_SHORT = '手に取りたいのはどちら？';
 </script>
 
@@ -357,6 +357,7 @@ function renderBattle() {
   }
 
   document.getElementById('btn-back').disabled = (currentQ === 0);
+  window.scrollTo(0, 0);
 }
 
 function selectChoice(pos) {
