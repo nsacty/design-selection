@@ -227,6 +227,23 @@
     #screen-done h2 { font-size: 1.2rem; margin-bottom: 0.75rem; }
     #screen-done p { color: #666; font-size: 0.9rem; line-height: 1.7; }
 
+    /* 名前入力 */
+    .name-input-wrap {
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto 1rem;
+    }
+    .name-input-wrap input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+      text-align: center;
+    }
+    .name-input-wrap input:focus { border-color: #888; }
+
     /* 共通ボタン */
     .btn-primary {
       display: block;
@@ -270,6 +287,9 @@ const SCENARIO_B_SHORT = '手に取りたいのはどちら？';
 <div id="screen-top" class="screen active">
   <h1>パンフレット評価アンケート</h1>
   <p>2つのシナリオにお答えください。<br>所要時間：約3〜5分</p>
+  <div class="name-input-wrap">
+    <input type="text" id="name-input" placeholder="お名前またはニックネーム（任意）" maxlength="20">
+  </div>
   <button class="btn-primary" onclick="gotoScenario('a')">評価を始める</button>
 </div>
 
@@ -486,10 +506,11 @@ function scrollPair(dir) {
 
 function submitAndDone() {
   showScreen('screen-done');
+  const name = document.getElementById('name-input').value.trim();
   fetch(GAS_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ resultA: resultA + 1, resultB: resultB + 1 }),
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ name, resultA: resultA + 1, resultB: resultB + 1 }),
     mode: 'no-cors'
   }).catch(() => {});
 }
