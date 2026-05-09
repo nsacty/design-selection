@@ -17,7 +17,7 @@
     .screen.active { display: block; }
 
     /* トップ画面 */
-    #screen-top {
+    #screen-top.active {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -161,7 +161,7 @@
     }
 
     /* 完了画面 */
-    #screen-done {
+    #screen-done.active {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -196,6 +196,7 @@
 <!-- ===================== -->
 <script>
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzcFg7Yrip0ZQEgrm8XxFzhA2t1-5w5eIq_giH6HcRB_6Hvg5ohhQlOYbUcs7uDS7Pbtw/exec';
+
 
 const IMAGES = [
   'images/pattern1.jpg',
