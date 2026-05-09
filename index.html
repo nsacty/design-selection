@@ -93,8 +93,11 @@
     .btn-back:disabled { opacity: 0; pointer-events: none; }
 
     /* 対戦コンテンツ */
-    .battle-content { padding: 1rem; }
+    .battle-content { padding: 1rem; max-width: 600px; margin: 0 auto; }
     .battle-pair { display: flex; flex-direction: column; gap: 1rem; }
+
+    /* PC幅制限ラッパー */
+    .battle-inner { max-width: 600px; margin: 0 auto; }
     .battle-item {
       background: #fff;
       border-radius: 10px;
@@ -247,11 +250,13 @@ const SCENARIO_B_SHORT = '手に取りたいのはどちら？';
 <!-- 対戦画面 -->
 <div id="screen-battle" class="screen">
   <div class="battle-header">
-    <div class="battle-header-row1">
-      <span class="battle-digest" id="battle-digest"></span>
-      <span class="battle-progress" id="battle-progress"></span>
+    <div class="battle-inner">
+      <div class="battle-header-row1">
+        <span class="battle-digest" id="battle-digest"></span>
+        <span class="battle-progress" id="battle-progress"></span>
+      </div>
+      <button class="btn-back" id="btn-back" onclick="goBack()">◀ 前の問に戻る</button>
     </div>
-    <button class="btn-back" id="btn-back" onclick="goBack()">◀ 前の問に戻る</button>
   </div>
 
   <div class="battle-content">
@@ -259,12 +264,14 @@ const SCENARIO_B_SHORT = '手に取りたいのはどちら？';
   </div>
 
   <div class="battle-footer">
-    <div class="battle-footer-label">どちらが良いですか？</div>
-    <div class="choice-buttons">
-      <button class="btn-choice" id="btn-choice-0" onclick="selectChoice(0)"></button>
-      <button class="btn-choice" id="btn-choice-1" onclick="selectChoice(1)"></button>
+    <div class="battle-inner">
+      <div class="battle-footer-label">どちらが良いですか？</div>
+      <div class="choice-buttons">
+        <button class="btn-choice" id="btn-choice-0" onclick="selectChoice(0)"></button>
+        <button class="btn-choice" id="btn-choice-1" onclick="selectChoice(1)"></button>
+      </div>
+      <button class="btn-decide" id="btn-decide" onclick="decide()" disabled>決定</button>
     </div>
-    <button class="btn-decide" id="btn-decide" onclick="decide()" disabled>決定</button>
   </div>
 </div>
 
