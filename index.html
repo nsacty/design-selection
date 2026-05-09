@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>パンフレット評価アンケート</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
+      background: #f5f5f0;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* トップ画面 */
+    #screen-top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      text-align: center;
+    }
+    #screen-top h1 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    #screen-top p {
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    .btn-start {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      padding: 1rem;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .btn-start:active { opacity: 0.8; }
+
+    /* 評価画面 */
+    #screen-a, #screen-b {
+      padding: 1.25rem 1rem 3rem;
+    }
+
+    .progress-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1.25rem;
+    }
+    .progress-bar span {
+      flex: 1;
+      height: 3px;
+      border-radius: 2px;
+      background: #ddd;
+    }
+    .progress-bar span.done { background: #222; }
+
+    .scenario-box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.75;
+      font-size: 0.88rem;
+      color: #333;
+      border: 1px solid #e8e8e0;
+    }
+    .scenario-box .scenario-label {
+      font-size: 0.75rem;
+      color: #999;
+      margin-bottom: 0.4rem;
+    }
+
+    .rank-display {
+      margin-bottom: 1rem;
+      min-height: 2rem;
+    }
+    .rank-display .hint {
+      font-size: 0.8rem;
+      color: #999;
+    }
+    .rank-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 0.4rem;
+    }
+    .rank-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .rank-pill .rank-num { font-weight: 600; }
+    .rank-pill .cancel-icon { color: #aaa; font-size: 0.75rem; }
+
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .img-card {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .img-card.selected {
+      border-color: #222;
+    }
+    .img-card img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+    }
+    .img-card .label {
+      text-align: center;
+      font-size: 0.78rem;
+      padding: 6px 4px;
+      color: #555;
+    }
+    .img-card .rank-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 28px;
+      height: 28px;
+      background: #222;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* 完了画面 */
+    #screen-done {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      text-align: center;
+    }
+    #screen-done h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+    #screen-done p {
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    /* エラー表示 */
+    .error-msg {
+      color: #c00;
+      font-size: 0.82rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===================== -->
+<!-- 設定（ここを編集）      -->
+<!-- ===================== -->
+<script>
+const GAS_URL = 'YOUR_GAS_URL_HERE';
+
+const IMAGES = [
+  'images/pattern1.jpg',
+  'images/pattern2.jpg',
+  'images/pattern3.jpg',
+  'images/pattern4.jpg',
+  'images/pattern5.jpg'
+];
+
+const LABELS = [
+  'パターン1',
+  'パターン2',
+  'パターン3',
+  'パターン4',
+  'パターン5'
+];
+</script>
+
+<!-- トップ画面 -->
+<div id="screen-top" class="screen active">
+  <h1>パンフレット評価アンケート</h1>
+  <p>2つのシナリオにお答えください。<br>所要時間：約3〜5分</p>
+  <button class="btn-start" onclick="startEval()">評価を始める</button>
+</div>
+
+<!-- シナリオA -->
+<div id="screen-a" class="screen">
+  <div class="progress-bar">
+    <span class="done"></span>
+    <span></span>
+  </div>
+  <div class="scenario-box">
+    <div class="scenario-label">シナリオ 1 / 2</div>
+    あなたは病院の受付スタッフです。外から来た営業の方が、パンフレットを5種類持ってきて「先生にお渡しください」と言っています。<br><br>
+    <strong>先生の机に置きたいと思う順に、良いと思うものから順番にタップしてください。</strong>
+  </div>
+  <div class="rank-display">
+    <div class="hint" id="hint-a">タップして1位から順に選んでください</div>
+    <div class="rank-pills" id="pills-a"></div>
+  </div>
+  <div class="images-grid" id="grid-a"></div>
+</div>
+
+<!-- シナリオB -->
+<div id="screen-b" class="screen">
+  <div class="progress-bar">
+    <span class="done"></span>
+    <span class="done"></span>
+  </div>
+  <div class="scenario-box">
+    <div class="scenario-label">シナリオ 2 / 2</div>
+    あなたは病院の待合室で順番を待っています。テーブルにパンフレットが5種類置いてあります。<br><br>
+    <strong>手に取って読んでみたい順に、読みたいと思うものから順番にタップしてください。</strong>
+  </div>
+  <div class="rank-display">
+    <div class="hint" id="hint-b">タップして1位から順に選んでください</div>
+    <div class="rank-pills" id="pills-b"></div>
+  </div>
+  <div class="images-grid" id="grid-b"></div>
+</div>
+
+<!-- 完了画面 -->
+<div id="screen-done" class="screen">
+  <h2>ありがとうございました</h2>
+  <p>回答を受け付けました。<br>ブラウザを閉じていただいてかまいません。</p>
+</div>
+
+<script>
+// ---- 状態管理 ----
+let rankingA = []; // 選択順のインデックス（0始まり）
+let rankingB = [];
+
+// ---- 画面切替 ----
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ---- 開始 ----
+function startEval() {
+  rankingA = [];
+  rankingB = [];
+  buildGrid('a');
+  showScreen('screen-a');
+}
+
+// ---- グリッド構築 ----
+function buildGrid(scenario) {
+  const grid = document.getElementById('grid-' + scenario);
+  grid.innerHTML = '';
+  IMAGES.forEach((src, i) => {
+    const card = document.createElement('div');
+    card.className = 'img-card';
+    card.id = 'card-' + scenario + '-' + i;
+    card.onclick = () => tapCard(scenario, i);
+
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = LABELS[i];
+
+    const badge = document.createElement('div');
+    badge.className = 'rank-badge';
+    badge.id = 'badge-' + scenario + '-' + i;
+    badge.style.display = 'none';
+
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = LABELS[i];
+
+    card.appendChild(badge);
+    card.appendChild(img);
+    card.appendChild(label);
+    grid.appendChild(card);
+  });
+}
+
+// ---- タップ処理 ----
+function tapCard(scenario, idx) {
+  const ranking = scenario === 'a' ? rankingA : rankingB;
+  const pos = ranking.indexOf(idx);
+
+  if (pos !== -1) {
+    // 選択済み → その順位以降を取り消す
+    const removed = ranking.splice(pos);
+    removed.forEach(i => {
+      document.getElementById('card-' + scenario + '-' + i).classList.remove('selected');
+      const badge = document.getElementById('badge-' + scenario + '-' + i);
+      badge.style.display = 'none';
+    });
+  } else {
+    // 未選択 → 追加
+    ranking.push(idx);
+    const rank = ranking.length;
+    const card  = document.getElementById('card-' + scenario + '-' + idx);
+    const badge = document.getElementById('badge-' + scenario + '-' + idx);
+    card.classList.add('selected');
+    badge.textContent = rank;
+    badge.style.display = 'flex';
+  }
+
+  updatePills(scenario);
+
+  // 5枚すべて選び終えたら自動遷移
+  if (ranking.length === 5) {
+    setTimeout(() => {
+      if (scenario === 'a') {
+        buildGrid('b');
+        showScreen('screen-b');
+      } else {
+        submitAndDone();
+      }
+    }, 500);
+  }
+}
+
+// ---- 選択状態表示（ピル） ----
+function updatePills(scenario) {
+  const ranking = scenario === 'a' ? rankingA : rankingB;
+  const pills   = document.getElementById('pills-' + scenario);
+  const hint    = document.getElementById('hint-' + scenario);
+
+  pills.innerHTML = '';
+  if (ranking.length === 0) {
+    hint.style.display = 'block';
+    return;
+  }
+  hint.style.display = 'none';
+
+  ranking.forEach((idx, rank) => {
+    const pill = document.createElement('div');
+    pill.className = 'rank-pill';
+    pill.innerHTML = `<span class="rank-num">${rank + 1}位</span><span>${LABELS[idx]}</span><span class="cancel-icon">×</span>`;
+    pill.onclick = () => tapCard(scenario, idx); // タップで取り消し
+    pills.appendChild(pill);
+  });
+}
+
+// ---- 送信 ----
+function submitAndDone() {
+  showScreen('screen-done');
+
+  fetch(GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ rankingA, rankingB }),
+    mode: 'no-cors'
+  }).catch(() => {});
+}
+</script>
+
+</body>
+</html>
