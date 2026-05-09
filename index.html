@@ -90,9 +90,25 @@
     .btn-back:disabled { opacity: 0; pointer-events: none; }
 
     /* 対戦コンテンツ */
-    .battle-content { padding: 1rem; max-width: 600px; margin: 0 auto; }
-    .battle-pair { display: flex; flex-direction: column; gap: 1rem; }
-
+    .battle-content { padding: 1rem 0; }
+    .battle-guide {
+      font-size: 0.75rem;
+      color: #999;
+      text-align: center;
+      margin-bottom: 0.6rem;
+      padding: 0 1rem;
+    }
+    .battle-pair {
+      display: flex;
+      flex-direction: row;
+      gap: 0.75rem;
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 1rem 0.75rem;
+      scrollbar-width: none;
+    }
+    .battle-pair::-webkit-scrollbar { display: none; }
     /* PC幅制限ラッパー */
     .battle-inner { max-width: 600px; margin: 0 auto; }
     .battle-item {
@@ -100,6 +116,8 @@
       border-radius: 10px;
       overflow: hidden;
       border: 1px solid #e8e8e0;
+      flex: 0 0 85%;
+      scroll-snap-align: center;
     }
     .battle-item-label {
       padding: 0.55rem 1rem;
@@ -257,6 +275,7 @@ const SCENARIO_B_SHORT = '手に取りたいのはどちら？';
   </div>
 
   <div class="battle-content">
+    <div class="battle-guide">← 横にスクロールできます　　画像をタップすると拡大できます</div>
     <div class="battle-pair" id="battle-pair"></div>
   </div>
 
