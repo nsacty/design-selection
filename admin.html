@@ -13,31 +13,17 @@
       min-height: 100vh;
       padding: 2rem 1rem;
     }
-
     .container { max-width: 540px; margin: 0 auto; }
+    h1 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem; }
 
-    h1 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-    }
-
-    /* ログインフォーム */
     #login-section {
       background: #fff;
       border-radius: 10px;
       padding: 1.5rem;
       border: 1px solid #e8e8e0;
     }
-    #login-section p {
-      font-size: 0.88rem;
-      color: #555;
-      margin-bottom: 1rem;
-    }
-    .input-row {
-      display: flex;
-      gap: 8px;
-    }
+    #login-section p { font-size: 0.88rem; color: #555; margin-bottom: 1rem; }
+    .input-row { display: flex; gap: 8px; }
     input[type="password"] {
       flex: 1;
       padding: 0.6rem 0.8rem;
@@ -56,21 +42,10 @@
       font-size: 0.9rem;
       cursor: pointer;
     }
-    .btn:active { opacity: 0.8; }
-    .error-msg {
-      color: #c00;
-      font-size: 0.82rem;
-      margin-top: 0.6rem;
-    }
+    .error-msg { color: #c00; font-size: 0.82rem; margin-top: 0.6rem; }
 
-    /* 集計セクション */
     #stats-section { display: none; }
-
-    .count-label {
-      font-size: 0.85rem;
-      color: #888;
-      margin-bottom: 1.5rem;
-    }
+    .count-label { font-size: 0.85rem; color: #888; margin-bottom: 1.5rem; }
     .count-label strong { color: #222; font-size: 1rem; }
 
     .chart-section {
@@ -80,23 +55,10 @@
       border: 1px solid #e8e8e0;
       margin-bottom: 1rem;
     }
-    .chart-section h2 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin-bottom: 0.35rem;
-    }
-    .chart-section .subtitle {
-      font-size: 0.8rem;
-      color: #999;
-      margin-bottom: 1.25rem;
-    }
+    .chart-section h2 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .chart-section .subtitle { font-size: 0.8rem; color: #999; margin-bottom: 1.25rem; }
 
-    .bar-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 0.75rem;
-    }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
     .bar-label {
       width: 80px;
       font-size: 0.82rem;
@@ -119,23 +81,19 @@
       background: #222;
       transition: width 0.5s ease;
       min-width: 2px;
+      display: flex;
+      align-items: center;
     }
     .bar-fill.top { background: #2a6; }
-    .bar-score {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
+    .bar-score-in {
+      margin-left: auto;
+      padding-right: 6px;
       font-size: 0.78rem;
       color: #fff;
       font-weight: 600;
+      white-space: nowrap;
     }
-    .bar-score.outside {
-      position: static;
-      transform: none;
-      color: #555;
-      font-size: 0.78rem;
-    }
+    .bar-score-out { font-size: 0.78rem; color: #555; white-space: nowrap; }
 
     .reload-btn {
       display: block;
@@ -150,14 +108,7 @@
       cursor: pointer;
       text-align: center;
     }
-    .reload-btn:active { background: #f0f0f0; }
-
-    .loading {
-      text-align: center;
-      color: #999;
-      font-size: 0.88rem;
-      padding: 2rem 0;
-    }
+    .loading { text-align: center; color: #999; font-size: 0.88rem; padding: 2rem 0; }
   </style>
 </head>
 <body>
@@ -165,22 +116,14 @@
 <!-- ===================== -->
 <!-- 設定（ここを編集）      -->
 <!-- ===================== -->
-<script>
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzcFg7Yrip0ZQEgrm8XxFzhA2t1-5w5eIq_giH6HcRB_6Hvg5ohhQlOYbUcs7uDS7Pbtw/exec';
 
-const LABELS = [
-  'パターン1',
-  'パターン2',
-  'パターン3',
-  'パターン4',
-  'パターン5'
-];
+const LABELS = ['パターン1', 'パターン2', 'パターン3', 'パターン4', 'パターン5'];
 </script>
 
 <div class="container">
   <h1>パンフレット評価 — 集計</h1>
 
-  <!-- ログイン -->
   <div id="login-section">
     <p>管理者パスワードを入力してください</p>
     <div class="input-row">
@@ -191,22 +134,20 @@ const LABELS = [
     <div class="error-msg" id="login-error"></div>
   </div>
 
-  <!-- 集計 -->
   <div id="stats-section">
     <div class="loading" id="loading-msg">読み込み中...</div>
-
     <div id="stats-content" style="display:none;">
       <p class="count-label">回答数：<strong id="count-display">0</strong> 件</p>
 
       <div class="chart-section">
         <h2>シナリオ A</h2>
-        <div class="subtitle">受付スタッフとして先生に渡したい順</div>
+        <div class="subtitle">受付スタッフとして先生に渡したい — 1位に選ばれた回数</div>
         <div id="chart-a"></div>
       </div>
 
       <div class="chart-section">
         <h2>シナリオ B</h2>
-        <div class="subtitle">待合室の患者として手に取りたい順</div>
+        <div class="subtitle">待合室の患者として手に取りたい — 1位に選ばれた回数</div>
         <div id="chart-b"></div>
       </div>
 
@@ -244,7 +185,6 @@ function loadStats() {
         document.getElementById('login-error').textContent = 'パスワードが違います';
         return;
       }
-
       if (data.status !== 'ok') {
         document.getElementById('loading-msg').textContent = 'データの取得に失敗しました';
         document.getElementById('loading-msg').style.display = 'block';
@@ -269,21 +209,20 @@ function renderChart(containerId, scores) {
   const topIdx   = scores.indexOf(Math.max(...scores));
 
   scores.forEach((score, i) => {
-    const pct    = Math.round((score / maxScore) * 100);
-    const isTop  = i === topIdx;
-    const isWide = pct >= 20; // バー内にスコアを表示できる幅かどうか
+    const pct   = Math.round((score / maxScore) * 100);
+    const isTop = i === topIdx && score > 0;
+    const isWide = pct >= 25;
 
     const row = document.createElement('div');
     row.className = 'bar-row';
-
     row.innerHTML = `
       <div class="bar-label" title="${LABELS[i]}">${LABELS[i]}</div>
       <div class="bar-track">
-        <div class="bar-fill${isTop ? ' top' : ''}" style="width:${pct}%">
-          ${isWide ? `<span class="bar-score">${score}</span>` : ''}
+        <div class="bar-fill${isTop ? ' top' : ''}" style="width:${Math.max(pct,2)}%">
+          ${isWide ? `<span class="bar-score-in">${score}票</span>` : ''}
         </div>
       </div>
-      ${!isWide ? `<span class="bar-score outside">${score}</span>` : ''}
+      ${!isWide ? `<span class="bar-score-out">${score}票</span>` : ''}
     `;
     container.appendChild(row);
   });

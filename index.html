@@ -10,13 +10,11 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
       background: #f5f5f0;
       color: #222;
-      min-height: 100vh;
     }
 
     .screen { display: none; }
-    .screen.active { display: block; }
 
-    /* トップ画面 */
+    /* ===== トップ ===== */
     #screen-top.active {
       display: flex;
       flex-direction: column;
@@ -26,141 +24,154 @@
       padding: 2rem;
       text-align: center;
     }
-    #screen-top h1 {
-      font-size: 1.3rem;
-      font-weight: 600;
+    #screen-top h1 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.75rem; }
+    #screen-top p { color: #666; font-size: 0.88rem; line-height: 1.8; margin-bottom: 2rem; }
+
+    /* ===== シナリオ説明 ===== */
+    #screen-scenario-a.active,
+    #screen-scenario-b.active {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 2rem 1.25rem;
+    }
+    .scenario-intro-label {
+      font-size: 0.75rem;
+      color: #999;
       margin-bottom: 0.75rem;
     }
-    #screen-top p {
-      color: #666;
+    .scenario-intro-text {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1.25rem;
       font-size: 0.9rem;
-      line-height: 1.7;
-      margin-bottom: 2.5rem;
+      line-height: 1.8;
+      color: #333;
+      border: 1px solid #e8e8e0;
+      white-space: pre-wrap;
+      flex: 1;
+      margin-bottom: 1.5rem;
     }
-    .btn-start {
-      display: block;
+
+    /* ===== 対戦画面 ===== */
+    #screen-battle.active { display: block; }
+    #screen-battle {
+      padding-top: 80px;
+      padding-bottom: 148px;
+    }
+
+    /* 上部固定 */
+    .battle-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: #fff;
+      border-bottom: 1px solid #e8e8e0;
+      padding: 0.6rem 1rem;
+      z-index: 100;
+    }
+    .battle-header-row1 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.3rem;
+    }
+    .battle-digest {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #333;
+    }
+    .battle-progress { font-size: 0.78rem; color: #999; }
+    .btn-back {
+      font-size: 0.72rem;
+      color: #999;
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+    .btn-back:disabled { opacity: 0; pointer-events: none; }
+
+    /* 対戦コンテンツ */
+    .battle-content { padding: 1rem; }
+    .battle-pair { display: flex; flex-direction: column; gap: 1rem; }
+    .battle-item {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e8e8e0;
+    }
+    .battle-item-label {
+      padding: 0.55rem 1rem;
+      font-size: 0.82rem;
+      color: #555;
+      font-weight: 500;
+      border-bottom: 1px solid #f0f0e8;
+    }
+    .battle-item img { width: 100%; display: block; cursor: pointer; }
+
+    /* 全画面オーバーレイ */
+    .fullscreen-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+    }
+    .fullscreen-overlay.active { display: flex; }
+    .fullscreen-overlay img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+    /* 下部固定 */
+    .battle-footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #fff;
+      border-top: 1px solid #e8e8e0;
+      padding: 0.75rem 1rem;
+      z-index: 100;
+    }
+    .battle-footer-label {
+      font-size: 0.75rem;
+      color: #999;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .choice-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .btn-choice {
+      padding: 0.6rem 0.4rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      font-size: 0.8rem;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.12s;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .btn-choice.selected { border-color: #222; background: #222; color: #fff; }
+    .btn-decide {
       width: 100%;
-      max-width: 320px;
-      padding: 1rem;
-      background: #222;
+      padding: 0.72rem;
+      background: #ccc;
       color: #fff;
       border: none;
       border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    .btn-start:active { opacity: 0.8; }
-
-    /* 評価画面 */
-    #screen-a, #screen-b {
-      padding: 1.25rem 1rem 3rem;
-    }
-
-    .progress-bar {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 1.25rem;
-    }
-    .progress-bar span {
-      flex: 1;
-      height: 3px;
-      border-radius: 2px;
-      background: #ddd;
-    }
-    .progress-bar span.done { background: #222; }
-
-    .scenario-box {
-      background: #fff;
-      border-radius: 10px;
-      padding: 1rem 1.1rem;
-      margin-bottom: 1.25rem;
-      line-height: 1.75;
-      font-size: 0.88rem;
-      color: #333;
-      border: 1px solid #e8e8e0;
-    }
-    .scenario-box .scenario-label {
-      font-size: 0.75rem;
-      color: #999;
-      margin-bottom: 0.4rem;
-    }
-
-    .rank-display {
-      margin-bottom: 1rem;
-      min-height: 2rem;
-    }
-    .rank-display .hint {
-      font-size: 0.8rem;
-      color: #999;
-    }
-    .rank-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 0.4rem;
-    }
-    .rank-pill {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 10px;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      user-select: none;
-    }
-    .rank-pill .rank-num { font-weight: 600; }
-    .rank-pill .cancel-icon { color: #aaa; font-size: 0.75rem; }
-
-    .images-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-    .img-card {
-      position: relative;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 2px solid transparent;
-      background: #fff;
-      cursor: pointer;
-      transition: border-color 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .img-card.selected {
-      border-color: #222;
-    }
-    .img-card img {
-      width: 100%;
-      display: block;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-    }
-    .img-card .label {
-      text-align: center;
-      font-size: 0.78rem;
-      padding: 6px 4px;
-      color: #555;
-    }
-    .img-card .rank-badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      width: 28px;
-      height: 28px;
-      background: #222;
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
+      font-size: 0.95rem;
       font-weight: 600;
+      cursor: not-allowed;
+      transition: background 0.15s;
     }
+    .btn-decide.enabled { background: #222; cursor: pointer; }
 
-    /* 完了画面 */
+    /* ===== 完了 ===== */
     #screen-done.active {
       display: flex;
       flex-direction: column;
@@ -170,22 +181,22 @@
       padding: 2rem;
       text-align: center;
     }
-    #screen-done h2 {
-      font-size: 1.2rem;
-      margin-bottom: 0.75rem;
-    }
-    #screen-done p {
-      color: #666;
-      font-size: 0.9rem;
-      line-height: 1.7;
-    }
+    #screen-done h2 { font-size: 1.2rem; margin-bottom: 0.75rem; }
+    #screen-done p { color: #666; font-size: 0.9rem; line-height: 1.7; }
 
-    /* エラー表示 */
-    .error-msg {
-      color: #c00;
-      font-size: 0.82rem;
-      margin-top: 0.5rem;
-      text-align: center;
+    /* 共通ボタン */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      padding: 1rem;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -195,7 +206,7 @@
 <!-- 設定（ここを編集）      -->
 <!-- ===================== -->
 <script>
-const GAS_URL = 'YOUR_GAS_URL_HERE';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzcFg7Yrip0ZQEgrm8XxFzhA2t1-5w5eIq_giH6HcRB_6Hvg5ohhQlOYbUcs7uDS7Pbtw/exec';
 
 const IMAGES = [
   'images/pattern1.jpg',
@@ -204,184 +215,220 @@ const IMAGES = [
   'images/pattern4.jpg',
   'images/pattern5.jpg'
 ];
+const LABELS = ['パターン1', 'パターン2', 'パターン3', 'パターン4', 'パターン5'];
 
-const LABELS = [
-  'パターン1',
-  'パターン2',
-  'パターン3',
-  'パターン4',
-  'パターン5'
-];
+const SCENARIO_A_LONG  = 'あなたは病院の受付スタッフです。外から来た営業の方が、パンフレットを5種類持ってきて「先生にお渡しください」と言っています。\n\n2枚ずつ比べながら、先生の机に置きたいと思うものを選んでください。';
+const SCENARIO_A_SHORT = '先生に渡したいのはどちら？';
+const SCENARIO_B_LONG  = 'あなたは病院の待合室で順番を待っています。テーブルにパンフレットが5種類置いてあります。\n\n2枚ずつ比べながら、手に取って読んでみたいと思うものを選んでください。';
+const SCENARIO_B_SHORT = '手に取りたいのはどちら？';
 </script>
 
-<!-- トップ画面 -->
+<!-- トップ -->
 <div id="screen-top" class="screen active">
   <h1>パンフレット評価アンケート</h1>
   <p>2つのシナリオにお答えください。<br>所要時間：約3〜5分</p>
-  <button class="btn-start" onclick="startEval()">評価を始める</button>
+  <button class="btn-primary" onclick="gotoScenario('a')">評価を始める</button>
 </div>
 
-<!-- シナリオA -->
-<div id="screen-a" class="screen">
-  <div class="progress-bar">
-    <span class="done"></span>
-    <span></span>
-  </div>
-  <div class="scenario-box">
-    <div class="scenario-label">シナリオ 1 / 2</div>
-    あなたは病院の受付スタッフです。外から来た営業の方が、パンフレットを5種類持ってきて「先生にお渡しください」と言っています。<br><br>
-    <strong>先生の机に置きたいと思う順に、良いと思うものから順番にタップしてください。</strong>
-  </div>
-  <div class="rank-display">
-    <div class="hint" id="hint-a">タップして1位から順に選んでください</div>
-    <div class="rank-pills" id="pills-a"></div>
-  </div>
-  <div class="images-grid" id="grid-a"></div>
+<!-- シナリオA説明 -->
+<div id="screen-scenario-a" class="screen">
+  <div class="scenario-intro-label">シナリオ 1 / 2</div>
+  <div class="scenario-intro-text" id="text-scenario-a"></div>
+  <button class="btn-primary" onclick="startBattle('a')">始める</button>
 </div>
 
-<!-- シナリオB -->
-<div id="screen-b" class="screen">
-  <div class="progress-bar">
-    <span class="done"></span>
-    <span class="done"></span>
-  </div>
-  <div class="scenario-box">
-    <div class="scenario-label">シナリオ 2 / 2</div>
-    あなたは病院の待合室で順番を待っています。テーブルにパンフレットが5種類置いてあります。<br><br>
-    <strong>手に取って読んでみたい順に、読みたいと思うものから順番にタップしてください。</strong>
-  </div>
-  <div class="rank-display">
-    <div class="hint" id="hint-b">タップして1位から順に選んでください</div>
-    <div class="rank-pills" id="pills-b"></div>
-  </div>
-  <div class="images-grid" id="grid-b"></div>
+<!-- シナリオB説明 -->
+<div id="screen-scenario-b" class="screen">
+  <div class="scenario-intro-label">シナリオ 2 / 2</div>
+  <div class="scenario-intro-text" id="text-scenario-b"></div>
+  <button class="btn-primary" onclick="startBattle('b')">始める</button>
 </div>
 
-<!-- 完了画面 -->
+<!-- 対戦画面 -->
+<div id="screen-battle" class="screen">
+  <div class="battle-header">
+    <div class="battle-header-row1">
+      <span class="battle-digest" id="battle-digest"></span>
+      <span class="battle-progress" id="battle-progress"></span>
+    </div>
+    <button class="btn-back" id="btn-back" onclick="goBack()">◀ 前の問に戻る</button>
+  </div>
+
+  <div class="battle-content">
+    <div class="battle-pair" id="battle-pair"></div>
+  </div>
+
+  <div class="battle-footer">
+    <div class="battle-footer-label">どちらが良いですか？</div>
+    <div class="choice-buttons">
+      <button class="btn-choice" id="btn-choice-0" onclick="selectChoice(0)"></button>
+      <button class="btn-choice" id="btn-choice-1" onclick="selectChoice(1)"></button>
+    </div>
+    <button class="btn-decide" id="btn-decide" onclick="decide()" disabled>決定</button>
+  </div>
+</div>
+
+<!-- 完了 -->
 <div id="screen-done" class="screen">
   <h2>ありがとうございました</h2>
   <p>回答を受け付けました。<br>ブラウザを閉じていただいてかまいません。</p>
 </div>
 
-<script>
-// ---- 状態管理 ----
-let rankingA = []; // 選択順のインデックス（0始まり）
-let rankingB = [];
+<!-- 全画面オーバーレイ -->
+<div class="fullscreen-overlay" id="fullscreen-overlay" onclick="closeFullscreen()">
+  <img id="fullscreen-img" src="" alt="">
+</div>
 
-// ---- 画面切替 ----
+<script>
+let currentScenario = '';
+let order = [];
+let currentQ = 0;
+let currentWinner = -1;
+let selectedChoice = -1;
+let history = [];
+let resultA = -1;
+let resultB = -1;
+
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
 }
 
-// ---- 開始 ----
-function startEval() {
-  rankingA = [];
-  rankingB = [];
-  buildGrid('a');
-  showScreen('screen-a');
+function gotoScenario(scenario) {
+  if (scenario === 'a') {
+    document.getElementById('text-scenario-a').textContent = SCENARIO_A_LONG;
+    showScreen('screen-scenario-a');
+  } else {
+    document.getElementById('text-scenario-b').textContent = SCENARIO_B_LONG;
+    showScreen('screen-scenario-b');
+  }
 }
 
-// ---- グリッド構築 ----
-function buildGrid(scenario) {
-  const grid = document.getElementById('grid-' + scenario);
-  grid.innerHTML = '';
-  IMAGES.forEach((src, i) => {
-    const card = document.createElement('div');
-    card.className = 'img-card';
-    card.id = 'card-' + scenario + '-' + i;
-    card.onclick = () => tapCard(scenario, i);
+function startBattle(scenario) {
+  currentScenario = scenario;
+  order = shuffle([0, 1, 2, 3, 4]);
+  currentQ = 0;
+  currentWinner = order[0];
+  selectedChoice = -1;
+  history = [];
+  renderBattle();
+  showScreen('screen-battle');
+}
+
+function renderBattle() {
+  document.getElementById('battle-digest').textContent =
+    currentScenario === 'a' ? SCENARIO_A_SHORT : SCENARIO_B_SHORT;
+  document.getElementById('battle-progress').textContent = `${currentQ + 1} / 4`;
+
+  const idxA = currentWinner;
+  const idxB = order[currentQ + 1];
+
+  const pair = document.getElementById('battle-pair');
+  pair.innerHTML = '';
+  [idxA, idxB].forEach(idx => {
+    const item = document.createElement('div');
+    item.className = 'battle-item';
+
+    const lbl = document.createElement('div');
+    lbl.className = 'battle-item-label';
+    lbl.textContent = LABELS[idx];
 
     const img = document.createElement('img');
-    img.src = src;
-    img.alt = LABELS[i];
+    img.src = IMAGES[idx];
+    img.alt = LABELS[idx];
+    img.onclick = () => openFullscreen(IMAGES[idx]);
 
-    const badge = document.createElement('div');
-    badge.className = 'rank-badge';
-    badge.id = 'badge-' + scenario + '-' + i;
-    badge.style.display = 'none';
-
-    const label = document.createElement('div');
-    label.className = 'label';
-    label.textContent = LABELS[i];
-
-    card.appendChild(badge);
-    card.appendChild(img);
-    card.appendChild(label);
-    grid.appendChild(card);
+    item.appendChild(lbl);
+    item.appendChild(img);
+    pair.appendChild(item);
   });
-}
 
-// ---- タップ処理 ----
-function tapCard(scenario, idx) {
-  const ranking = scenario === 'a' ? rankingA : rankingB;
-  const pos = ranking.indexOf(idx);
+  document.getElementById('btn-choice-0').textContent = LABELS[idxA];
+  document.getElementById('btn-choice-1').textContent = LABELS[idxB];
+  document.getElementById('btn-choice-0').classList.remove('selected');
+  document.getElementById('btn-choice-1').classList.remove('selected');
 
-  if (pos !== -1) {
-    // 選択済み → その順位以降を取り消す
-    const removed = ranking.splice(pos);
-    removed.forEach(i => {
-      document.getElementById('card-' + scenario + '-' + i).classList.remove('selected');
-      const badge = document.getElementById('badge-' + scenario + '-' + i);
-      badge.style.display = 'none';
-    });
+  if (selectedChoice !== -1) {
+    document.getElementById(`btn-choice-${selectedChoice}`).classList.add('selected');
+    setDecideEnabled(true);
   } else {
-    // 未選択 → 追加
-    ranking.push(idx);
-    const rank = ranking.length;
-    const card  = document.getElementById('card-' + scenario + '-' + idx);
-    const badge = document.getElementById('badge-' + scenario + '-' + idx);
-    card.classList.add('selected');
-    badge.textContent = rank;
-    badge.style.display = 'flex';
+    setDecideEnabled(false);
   }
 
-  updatePills(scenario);
+  document.getElementById('btn-back').disabled = (currentQ === 0);
+}
 
-  // 5枚すべて選び終えたら自動遷移
-  if (ranking.length === 5) {
-    setTimeout(() => {
-      if (scenario === 'a') {
-        buildGrid('b');
-        showScreen('screen-b');
-      } else {
-        submitAndDone();
-      }
-    }, 500);
+function selectChoice(pos) {
+  selectedChoice = pos;
+  document.getElementById('btn-choice-0').classList.toggle('selected', pos === 0);
+  document.getElementById('btn-choice-1').classList.toggle('selected', pos === 1);
+  setDecideEnabled(true);
+}
+
+function setDecideEnabled(enabled) {
+  const btn = document.getElementById('btn-decide');
+  btn.classList.toggle('enabled', enabled);
+  btn.disabled = !enabled;
+}
+
+function decide() {
+  if (selectedChoice === -1) return;
+  history.push({ winner: currentWinner, selectedChoice });
+
+  const idxA = currentWinner;
+  const idxB = order[currentQ + 1];
+  const newWinner = selectedChoice === 0 ? idxA : idxB;
+
+  currentQ++;
+  selectedChoice = -1;
+
+  if (currentQ === 4) {
+    if (currentScenario === 'a') {
+      resultA = newWinner;
+      gotoScenario('b');
+    } else {
+      resultB = newWinner;
+      submitAndDone();
+    }
+  } else {
+    currentWinner = newWinner;
+    renderBattle();
   }
 }
 
-// ---- 選択状態表示（ピル） ----
-function updatePills(scenario) {
-  const ranking = scenario === 'a' ? rankingA : rankingB;
-  const pills   = document.getElementById('pills-' + scenario);
-  const hint    = document.getElementById('hint-' + scenario);
-
-  pills.innerHTML = '';
-  if (ranking.length === 0) {
-    hint.style.display = 'block';
-    return;
-  }
-  hint.style.display = 'none';
-
-  ranking.forEach((idx, rank) => {
-    const pill = document.createElement('div');
-    pill.className = 'rank-pill';
-    pill.innerHTML = `<span class="rank-num">${rank + 1}位</span><span>${LABELS[idx]}</span><span class="cancel-icon">×</span>`;
-    pill.onclick = () => tapCard(scenario, idx); // タップで取り消し
-    pills.appendChild(pill);
-  });
+function goBack() {
+  if (currentQ === 0) return;
+  const prev = history.pop();
+  currentQ--;
+  currentWinner = prev.winner;
+  selectedChoice = prev.selectedChoice;
+  renderBattle();
 }
 
-// ---- 送信 ----
+function openFullscreen(src) {
+  document.getElementById('fullscreen-img').src = src;
+  document.getElementById('fullscreen-overlay').classList.add('active');
+}
+function closeFullscreen() {
+  document.getElementById('fullscreen-overlay').classList.remove('active');
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 function submitAndDone() {
   showScreen('screen-done');
-
   fetch(GAS_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ rankingA, rankingB }),
+    body: JSON.stringify({ resultA: resultA + 1, resultB: resultB + 1 }),
     mode: 'no-cors'
   }).catch(() => {});
 }
